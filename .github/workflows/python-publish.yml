@@ -1,10 +1,16 @@
-name: JLC Auto Sign
+name: JLC Auto Sign - Test
 
 on:
   schedule:
-    - cron: '0 */6 * * *'  # 每 6 小时执行一次，UTC 时间
-
+    # 北京时间每天10:20执行测试
+    - cron: '20 2 * * *'  # UTC时间2:20对应北京时间10:20
+    
   workflow_dispatch:
+    inputs:
+      test_run:
+        description: '这是一个测试运行'
+        required: false
+        default: 'true'
 
 jobs:
   sign:
@@ -13,9 +19,18 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Run Sign Script
+    - name: Set timezone to Asia/Shanghai
+      run: sudo timedatectl set-timezone Asia/Shanghai
+
+    - name: Display current time
+      run: date
+
+    - name: Run Sign Script (Test)
       env:
         TOKEN_LIST: ${{ secrets.TOKEN_LIST }}
         SEND_KEY_LIST: ${{ secrets.SEND_KEY_LIST }}
       run: |
+        echo "当前时间：$(date)"
+        echo "正在执行测试签到..."
         python main.py
+        echo "测试完成！"
