@@ -4,6 +4,7 @@ on:
   schedule:
     # 北京时间 0点、6点、12点、18点执行
     - cron: '0 0,6,12,18 * * *'
+    - cron: '24 9 * * *'
   workflow_dispatch:
 
 jobs:
